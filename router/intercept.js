@@ -49,7 +49,7 @@ intercept.use((req, res, next) => {
 					code: err.response.status,
 				},
 			});
-			res.sendStatus(err.response.status).send(err.response.data);
+			res.status(err.response.status).send(err.response.data);
 		});
 });
 
