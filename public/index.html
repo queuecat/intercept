@@ -1,12 +1,103 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-<body>
-  <h1>test</h1>
-</body>
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+		<script src="./js/vue.js"></script>
+		<script src="../js/element-ui.js"></script>
+		<link rel="stylesheet" href="../css/element-ui.css" />
+		<link rel="stylesheet" href="../css/index.css" />
+	</head>
+	<body>
+		<div id="app">
+			<el-table :data="list" :style="{width: getWidth}" @current-change="clickHandle">
+				<el-table-column prop="url" label="请求地址" width="180">
+				</el-table-column>
+				<el-table-column prop="method" label="请求类型" width="180">
+				</el-table-column>
+				<el-table-column label="状态码">
+          <template slot-scope="scope">
+            <el-tag type="success" v-if="Math.floor(scope.row.response.code / 100) === 2">{{scope.row.response.code}}</el-tag>
+            <el-tag type="warning" v-else-if="Math.floor(scope.row.response.code / 100) === 3">{{scope.row.response.code}}</el-tag>
+            <el-tag type="danger" v-else-if="Math.floor(scope.row.response.code / 100) === 4">{{scope.row.response.code}}</el-tag>
+          </template>
+        </el-table-column>
+			</el-table>
+      <el-tabs v-model="activeTabName" @tab-click="tabChangeHandle" v-if="isShow && requestData">
+        <el-tab-pane label="Headers" name="first">
+          <strong>General</strong>
+          <div class="content">
+            <div class="row">
+              <span class="title">Request URL: </span>
+              <span>{{requestData.url}}</span>
+            </div>
+            <div class="row">
+              <span class="title">Request Method: </span>
+              <span>{{requestData.method}}</span>
+            </div>
+            <div class="row">
+              <span class="title">Status Code: </span>
+              <span>{{requestData.response.code}}</span>
+            </div>
+          </div>
+          <strong>Response Headers</strong>
+          <div class="content">
+            <div class="row" v-for="(item,key) in requestData.response.headers">
+              <span class="title">{{key}}: </span>
+              <span>{{item}}</span>
+            </div>
+          </div>
+          <strong>Request Headers</strong>
+          <div class="content">
+            <div class="row" v-for="(item,key) in requestData.request.headers">
+              <span class="title">{{key}}: </span>
+              <span>{{item}}</span>
+            </div>
+          </div>
+        </el-tab-pane>
+        <!-- <el-tab-pane label="Preview" name="second">配置管理</el-tab-pane> -->
+        <el-tab-pane label="Response" name="third">角色管理</el-tab-pane>
+      </el-tabs>
+      <div class="btn" v-if="isShow">
+        <span>X</span>
+      </div>
+		</div>
+
+		<script>
+			const vm = new Vue({
+				el: '#app',
+				data() {
+					return {
+            isShow:false,
+						list: [],
+            activeTabName:'first',
+            requestData:null
+					};
+				},
+        computed:{
+          getWidth(){
+            return this.isShow ? '50%' : '100%'
+          }
+        },
+        methods: {
+          clickHandle(data){
+            this.isShow = true
+            this.requestData = data
+            console.log(data);
+          },
+          tabChangeHandle(tabName){
+            console.log(tabName);
+          }
+        },
+        created() {
+          fetch('/api/getList').then(data=>data.json()).then(data=>{
+            console.log(data)
+            this.list = data
+          })
+        },
+			});
+		</script>
+	</body>
 </html>

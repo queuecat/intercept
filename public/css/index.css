@@ -1,0 +1,32 @@
+.el-tabs {
+  width: 50%;
+  position: fixed;
+  top: 17px;
+  right: 0;
+}
+
+.content {
+  padding: 10px 30px;
+}
+
+.content .row {
+  margin: 10px 0;
+}
+
+.content .title {
+  color: #5f6368;
+  font-weight: bold;
+}
+
+.btn {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  font-size: 20px;
+  cursor: pointer;
+  transition: all .2s;
+}
+
+.btn:hover {
+  color: #409EFF;
+}

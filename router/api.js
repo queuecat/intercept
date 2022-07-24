@@ -1,10 +1,11 @@
 // 引用express框架
 const express = require('express');
+const { getList } = require('../module/list');
 
 const api = express.Router();
 
 api.use('/getList', (req, res) => {
-	res.send([1, 2, 3]);
+	res.send(getList());
 });
 
 //导出路由对象

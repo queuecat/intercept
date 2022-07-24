@@ -25,12 +25,13 @@ const router = {
 	intercept: require('./router/intercept'),
 };
 
-// 静态资源托管
-// app.use(express.static(path.join(__dirname, './public')));
-// 抓包接口
-app.use('/api', router.api);
 // 拦截
 app.use(router.intercept);
+// 静态资源托管
+app.use(express.static(path.join(__dirname, './public')));
+// 抓包接口
+app.use('/api', router.api);
+
 
 httpServer.listen(3000, () =>
 	console.log('\033[42;30m 成功 \033[0m', '服务器启动成功')
