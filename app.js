@@ -12,11 +12,19 @@ const http = require('http');
 //配置https对象
 const httpServer = http.createServer(app);
 
+
+// 一级路由
+const router = {
+	api: require("./router/api"),
+	intercept: require("./router/intercept"),
+};
+
+// 静态资源托管
 app.use(express.static(path.join(__dirname, './public')));
-app.use((req, res) => {
-	console.log(123);
-	console.log(req.url);
-});
+// 抓包接口
+app.use('/api',router.api)
+// 拦截
+app.use(router.intercept);
 
 httpServer.listen(3000, () =>
 	console.log('\033[42;30m 成功 \033[0m', '服务器启动成功')
