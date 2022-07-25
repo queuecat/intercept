@@ -30,3 +30,26 @@
 .btn:hover {
   color: #409EFF;
 }
+.response-content{
+  padding: 20px;
+}
+.point{
+  display: inline-block;
+  margin-left: 18px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #67C23A;
+}
+.text-box{
+  width: 500px;
+  height: 500px;
+  margin-bottom: 20px;
+}
+.text-box textarea{
+  width: 100%;
+  height: 100%;
+}
+.text-box textarea:focus-visible{
+  border:node;
+}

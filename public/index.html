@@ -13,15 +13,20 @@
 	<body>
 		<div id="app">
 			<el-table :data="list" :style="{width: getWidth}" @current-change="clickHandle">
-				<el-table-column prop="url" label="请求地址" width="180">
+        <el-table-column prop="url" label="请求地址" width="300">
 				</el-table-column>
 				<el-table-column prop="method" label="请求类型" width="180">
 				</el-table-column>
-				<el-table-column label="状态码">
+        <el-table-column label="状态码" width="100">
           <template slot-scope="scope">
             <el-tag type="success" v-if="Math.floor(scope.row.response.code / 100) === 2">{{scope.row.response.code}}</el-tag>
             <el-tag type="warning" v-else-if="Math.floor(scope.row.response.code / 100) === 3">{{scope.row.response.code}}</el-tag>
             <el-tag type="danger" v-else-if="Math.floor(scope.row.response.code / 100) === 4">{{scope.row.response.code}}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="代理状态">
+          <template slot-scope="scope">
+            <span class="point" v-if="scope.row.isMap"></span>
           </template>
         </el-table-column>
 			</el-table>
@@ -58,9 +63,20 @@
           </div>
         </el-tab-pane>
         <!-- <el-tab-pane label="Preview" name="second">配置管理</el-tab-pane> -->
-        <el-tab-pane label="Response" name="third">角色管理</el-tab-pane>
+        <el-tab-pane label="Response" name="third">
+          <div class="response-content">
+            {{requestData.response.body}}
+          </div>
+        </el-tab-pane>
+        <el-tab-pane label="Map Data" name="three">
+          <div class="text-box">
+            <textarea ref="text"></textarea>
+          </div>
+          <el-button size="mini" @click="mapData(requestData.url)">代理</el-button>
+          <el-button size="mini" @click="mapClear(requestData.url)">取消代理</el-button>
+        </el-tab-pane>
       </el-tabs>
-      <div class="btn" v-if="isShow">
+      <div class="btn" v-if="isShow" @click="()=>{isShow = false}">
         <span>X</span>
       </div>
 		</div>
@@ -89,13 +105,45 @@
           },
           tabChangeHandle(tabName){
             console.log(tabName);
+          },
+          getList() {
+            fetch('/api/getList').then(data => data.json()).then(data => {
+              console.log(data)
+              this.list = data
+            })
+          },
+          mapData(key) {
+            const value = this.$refs.text.value
+            console.log(value);
+            fetch('/api/setMap', {
+              method: 'post',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                value,
+                key
+              })
+            }).then(data => data.json()).then(data => {
+              console.log(data)
+            })
+          },
+          mapClear(key) {
+            fetch('/api/ClearMap', {
+              method: 'post',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                key
+              })
+            }).then(data => data.json()).then(data => {
+              console.log(data)
+            })
           }
         },
         created() {
-          fetch('/api/getList').then(data=>data.json()).then(data=>{
-            console.log(data)
-            this.list = data
-          })
+          this.getList()
         },
 			});
 		</script>

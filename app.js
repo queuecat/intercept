@@ -34,8 +34,8 @@ app.use('/api', router.api);
 
 
 httpServer.listen(3000, () =>
-	console.log('\033[42;30m 成功 \033[0m', '服务器启动成功')
+	console.log('\033[42;30m 成功 \033[0m', '服务器启动成功 on port 3000')
 );
-httpsServer.listen(3001, () =>
-	console.log('\033[42;30m 成功 \033[0m', '服务器启动成功 on port 443')
-);
+// httpsServer.listen(3001, () =>
+// 	console.log('\033[42;30m 成功 \033[0m', '服务器启动成功 on port 3001')
+// );

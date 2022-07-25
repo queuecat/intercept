@@ -1,15 +1,33 @@
 // 引用express框架
 const express = require('express');
 const axios = require('axios');
-const request = require('request');
 const http = require('http');
 const { pushList } = require('../module/list');
+const { hasKey } = require('../module/map');
 
 const intercept = express.Router();
 
 intercept.use((req, res, next) => {
 	const url = req.url;
 	const hostname = req.hostname;
+
+	const map = hasKey(url)
+
+	if (map) {
+		pushList({
+			url,
+			method: req.method,
+			request: { headers: req.headers },
+			response: {
+				headers: {},
+				body: map,
+				code: 200,
+			},
+			isMap: true
+		});
+		res.send(map)
+		return
+	}
 
 	if (hostname === 'localhost') {
 		next();
