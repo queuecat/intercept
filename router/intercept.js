@@ -11,7 +11,7 @@ intercept.use((req, res, next) => {
 	const url = req.url;
 	const hostname = req.hostname;
 
-	const map = hasKey(url)
+	const map = hasKey(url);
 
 	if (map) {
 		pushList({
@@ -23,12 +23,12 @@ intercept.use((req, res, next) => {
 				body: map,
 				code: 200,
 			},
-			isMap: true
+			isMap: true,
 		});
-		res.send(map)
-		return
+		res.send(map);
+		return;
 	}
-
+	// console.log(req);
 	if (hostname === 'localhost') {
 		next();
 		return;
@@ -51,23 +51,20 @@ intercept.use((req, res, next) => {
 			res.send(response.data);
 		})
 		.catch((err) => {
-			console.log(
-				'err',
-				err.message,
-				Object.keys(err),
-				Object.keys(err.response)
-			);
+			console.log('err', err.message);
 			pushList({
 				url,
 				method: req.method,
 				request: { headers: req.headers },
 				response: {
-					headers: err.response.headers,
-					body: err.response.data,
-					code: err.response.status,
+					headers: err.response ? err.response.headers : {},
+					body: err.response ? err.response.data : {},
+					code: err.response ? err.response.status : 500,
 				},
 			});
-			res.status(err.response.status).send(err.response.data);
+			res
+				.status(err.response ? err.response.status : 500)
+				.send(err.response ? err.response.data : 'err');
 		});
 });
 
