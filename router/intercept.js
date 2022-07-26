@@ -5,7 +5,10 @@ const http = require('http');
 const { pushList } = require('../module/list');
 const { hasKey } = require('../module/map');
 
+
 const intercept = express.Router();
+
+
 
 intercept.use((req, res, next) => {
 	const url = req.url;
@@ -67,6 +70,9 @@ intercept.use((req, res, next) => {
 				.send(err.response ? err.response.data : 'err');
 		});
 });
+
+
+
 
 //导出路由对象
 module.exports = intercept;
