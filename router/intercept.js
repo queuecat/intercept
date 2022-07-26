@@ -31,7 +31,7 @@ intercept.use((req, res, next) => {
 		res.send(map);
 		return;
 	}
-	// console.log(req);
+	// console.log(req.url);
 	if (hostname === 'localhost') {
 		next();
 		return;

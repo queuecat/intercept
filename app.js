@@ -43,7 +43,9 @@ httpServer.addListener('connect', function (req, cltSocket, head) {
 			srvSocket.write(head);
 			srvSocket.pipe(cltSocket);
 			cltSocket.pipe(srvSocket);
-
+			srvSocket.on('error', function () {
+				cltSocket.end();
+			});
 		});
 		srvSocket.on('data', function (chunk) {
 			result += chunk
