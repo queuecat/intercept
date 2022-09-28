@@ -43,6 +43,9 @@ httpServer.addListener('connect', function (req, cltSocket, head) {
 			srvSocket.write(head);
 			srvSocket.pipe(cltSocket);
 			cltSocket.pipe(srvSocket);
+			cltSocket.on('error',(e)=>{
+				console.log(e.stack)
+			})
 			srvSocket.on('error', function () {
 				cltSocket.end();
 			});
